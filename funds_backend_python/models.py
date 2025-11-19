@@ -1,15 +1,16 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float
 from .database import Base
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 class Customer(Base):
     __tablename__ = "customers"
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
     email = Column(String, unique=True)
-    created_at = Column(DateTime, default=None)
+    created_at = Column(DateTime, server_default=func.now())
 
-    accounts = relationship("Account", back_populates="customers")
+    accounts = relationship("Account", back_populates="customer")
 
     
 
@@ -22,7 +23,7 @@ class Account(Base):
     status = Column(String, nullable=False)
     created_at = Column(DateTime, default=None)
     customer = relationship("Customer", back_populates="accounts")
-    transactions = relationship("Transaction", back_populates="accounts")
+    transactions = relationship("Transaction", back_populates="account")
     
 class Transaction(Base):
     __tablename__ = "transactions"
