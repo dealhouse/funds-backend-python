@@ -1,22 +1,11 @@
 from pydantic import BaseModel
-from typing import Optional
-from datatime import datetime
+from typing import Optional, Literal
+from datetime import datetime
 
-app = FastAPI()
 
 class CustomerCreate(BaseModel):
     name: str
     email: str
-
-class AccountCreate(BaseModel):
-    customer_id: int
-    account_type: Literal["SAVINGS", "CHECKING", "INVESTMENT"]
-    balance: float | None = None
-
-class TransactionCreate(BaseModel):
-    account_id: int
-    transcation_type: Literal["DEPOSIT", "WITHDRAWAL", "TRANSFER"]
-    amount: float
 
 class CustomerRead(BaseModel):
     id: int
@@ -26,21 +15,32 @@ class CustomerRead(BaseModel):
 
     model_config = {"from_attributes": True}
 
+class AccountCreate(BaseModel):
+    customer_id: int
+    account_type: Literal["SAVINGS", "CHECKING", "INVESTMENT"]
+    balance: float | None = None
+
 class AccountRead(BaseModel):
     id: int
-    account_id: int
-    type: str
-    amount: float
-    timestamp: datetime
+    customer_id: int
+    account_type: str
+    balance: float
+    status: str
+    created_at: datetime
 
     model_config = {"from_attributes": True}
+
+class TransactionCreate(BaseModel):
+    account_id: int
+    transcation_type: Literal["DEPOSIT", "WITHDRAWAL", "TRANSFER"]
+    amount: float
 
 class TransactionRead(BaseModel):
     id: int
     account_id: int
-    type: str
+    transaction_type: str
     amount: float
-    timestamp: datetime
+    time_stamp: datetime
 
     model_config = {"from_attributes": True}
 

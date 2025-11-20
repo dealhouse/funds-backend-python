@@ -8,7 +8,7 @@ class Customer(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
     email = Column(String, unique=True)
-    created_at = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     accounts = relationship("Account", back_populates="customer")
 
@@ -21,7 +21,7 @@ class Account(Base):
     account_type = Column(String, nullable=False)
     balance = Column(Float)
     status = Column(String, nullable=False)
-    created_at = Column(DateTime, default=None)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     customer = relationship("Customer", back_populates="accounts")
     transactions = relationship("Transaction", back_populates="account")
     
@@ -31,5 +31,5 @@ class Transaction(Base):
     account_id = Column(Integer, ForeignKey("accounts.id"), nullable=False)
     transaction_type = Column(String, nullable=False)
     amount = Column(Float)
-    time_stamp = Column(DateTime, default=None)
+    time_stamp = Column(DateTime(timezone=True), server_default=func.now())
     account = relationship("Account", back_populates="transactions")
